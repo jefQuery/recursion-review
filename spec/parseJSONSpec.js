@@ -10,6 +10,7 @@ describe('parseJSON', function() {
   });
 
   it('should parse basic numbers', function() {
+    parse.index = 0;
     expect(parse.numbers('9')).to.equal(9);
     parse.index = 0;
     expect(parse.numbers('-9')).to.equal(-9);

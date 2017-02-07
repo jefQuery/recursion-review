@@ -33,17 +33,53 @@ var parse = {
 
   numbers(json) {
     let resultsStr = '';
-    if (json[0] === '-') {
+    let digit = '123456789'.split('');
+    if (json[this.index] === '-') {
       resultsStr += '-';
       this.index++;
     }
-    if (json[0] === '0') {
+    if (json[this.index] === '0') {
       this.index++;
-      if (json[index] !== '.' || json[index].toLowerCase() !== 'e') {
-        throw new Error ('NaN!!!');
-      } 
+    } else {
+      while (digit.includes(json[this.index]) || json[this.index] === '0') {
+        resultsStr += json[this.index];
+        this.index++;
+      }
     }
-    this.index++;
+    //check for .
+      //if . , loop though digit
+    if (json[this.index] === '.') {
+      resultsStr += json[this.index];
+      this.index++;
+      while (digit.includes(json[this.index]) || json[this.index] === '0') {
+        resultsStr += json[this.index];
+        this.index++;
+      }
+    }
+
+    //check for e || E
+    if (json[this.index] !== undefined && json[this.index].toLowerCase() === 'e') {
+      // if true, check for + or -
+      resultsStr += json[this.index];
+      this.index++;
+      if (json[this.index] === '+' || json[this.index] === '-') {
+        resultsStr += json[this.index];
+        this.index++;
+      }
+      // loop though digits until not in digits;
+      while (digit.includes(json[this.index]) || json[this.index] === '0') {
+        resultsStr += json[this.index];
+        this.index++;
+      }
+    }
+
+
+    if (typeof Number(resultsStr) === 'number') {
+      return Number(resultsStr);
+    } else {
+      throw new Error ('NaN');
+    }
+    
   },
 
   strings(json) {
